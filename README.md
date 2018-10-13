@@ -1,4 +1,28 @@
-# Let's Build a Recommendation Engine 
+# Let's Build a Recommendation Engine
+
+<!-- toc -->
+
+- [Introduction](#introduction)
+- [The Project](#the-project)
+- [Approach](#approach)
+- [Phases](#phases)
+  * [Phase 1: Pipeline](#phase-1-pipeline)
+  * [Phase 2: Display](#phase-2-display)
+  * [Phase 3: Enrichment](#phase-3-enrichment)
+  * [Phase 4: Analysis](#phase-4-analysis)
+  * [Phase 5: Iteration](#phase-5-iteration)
+- [Deliverables](#deliverables)
+  * [Phase 1: Pipeline](#phase-1-pipeline-1)
+  * [Phase 2: Display](#phase-2-display-1)
+  * [Phase 3: Enrichment](#phase-3-enrichment-1)
+  * [Phase 4: Analysis](#phase-4-analysis-1)
+  * [Phase 5: Iteration](#phase-5-iteration-1)
+- [Background](#background)
+- [Resources](#resources)
+  * [Data](#data)
+  * [Links](#links)
+
+<!-- tocstop -->
 
 ### Introduction
 
@@ -33,7 +57,7 @@ The project is broken up into several phases, each with its own deliverables.
 
 Note that the order of the phases is specific and intentional - the Iteration phase is where you will spend the bulk of your time, both on this project and at your job.  Getting the proper scaffolding in place so you can iterate on your ideas quickly is the key to happiness and success.
 
-##### Phase 1: Pipeline
+#### Phase 1: Pipeline
 
 While your mind is probably already spinning with all kinds of novel recommendation dimensions, the first step is actually to hunker down and figure out the mechanics of how you will munge your data.  We all tend to jump in to scripts on our laptops, but in the end the long-term total cost of ownership of that approach is expensive.  
 
@@ -53,7 +77,7 @@ A good place to start after [reading up on AWS Glue](https://aws.amazon.com/glue
 It is worth noting that you need to create a custom JSON classifier for the Glue crawler due to the size of `events.json.gz` - see the solution [here](https://forums.aws.amazon.com/message.jspa?messageID=842705#842705).  Also, keep it in its compressed form in S3 - Glue seems to behave better.
 
 
-##### Phase 2: Display
+#### Phase 2: Display
 
 Now that you have both clean data and a repeatable way of generating it when it changes, it's time to build a way to peek into your results.  It may seem premature to focus on display now, but you are going to want to see the results of your recommendation algorithms as you experiment with them so taking care of the front end now will actually make your life easier in the long run.
 
@@ -71,7 +95,7 @@ A full tutorial on building a serverless web application can be found [here](htt
 The display doesn't need to be anything fancy - remember, this is a PoC and you only have text to work with, so a simple, structure result page is fine.  Keep in mind that this page will also be used to display your recommendations in Phase 4.
 
 
-##### Phase 3: Enrichment
+#### Phase 3: Enrichment
 
 Now we start getting to the fun part.
 
@@ -90,7 +114,7 @@ To continue building  the AWS Glue pipeline, you might
 
 If you followed this path, you would need to change your load routines to point to a Athena data source.  Another option is to make the Glue job from Phase 1 into a more monolithic codebase that does all your transformations and mappings.  Think about the benefits of each approach as you go.  Remember, the main cost of an application is in the maintainance not the development - how can you make your life easier as you add new logic and routines?
 
-##### Phase 4: Analysis
+#### Phase 4: Analysis
 
 At this point, you have an established framework for processing, enriching, and displaying data.  It's time to start coming up with some recommendations.
 
@@ -104,7 +128,7 @@ Once you can relate one event to another, start thinking about what storage and 
 
 Given the small data set, event dates can be ignored as you find recommendations for suggestion - you wouldn't want to recommend past events in a real application (that would just make people feel bad they missed it) but for the purposes of this project don't worry about incorporating date logic.  Of course, if you wanted to you could, now that all your dates are standardized as a result of your Phase 1 data normalization.  How convenient.
 
-##### Phase 5: Iteration
+#### Phase 5: Iteration
 
 Now that you have some recommendation basics flowing, it's time to really put some thought into both expanding and refining recommendations.  It is far trickier than you might think.  For example:
 
@@ -124,7 +148,7 @@ There is no "best recommendation" or right answer, so explore the data and your 
 
 Any and all underlying code should be checked in to GitHub in your fork of this repo.  For example, if you create a Python script for use in an AWS Glue job, check it in to `glue/scripts/`, a one-off script for fetching public data might go into `utils/`, etc.
 
-##### Phase 1: Pipeline
+#### Phase 1: Pipeline
 
 1. A transformation pipeline that cleans and normalizes incoming data.  Transformations *must* include:
 
@@ -137,7 +161,7 @@ Any and all underlying code should be checked in to GitHub in your fork of this 
 (*) If you start using this datetime format and stick to UTC now you'll be extremely thankful later on in your career.
 
 
-##### Phase 2: Display
+#### Phase 2: Display
 
 1. A display pipeline that takes the output of the Phase 1 transformations and loads them into a datastore.
 
@@ -146,7 +170,7 @@ Any and all underlying code should be checked in to GitHub in your fork of this 
 3. A (merged and closed) pull request from your feature branch (`phase_2`) to your master that covers all your code, utilities, notes, and so on.
 
 
-##### Phase 3: Enrichment
+#### Phase 3: Enrichment
 
 1. A transformation pipeline that merges `DMA-zip.csv.gz` data with `events.json.gz`.
 
@@ -155,7 +179,7 @@ Any and all underlying code should be checked in to GitHub in your fork of this 
 3. A (merged and closed) pull request from your feature branch (`phase_3`) to your master that covers all your code, utilities, notes, and so on.
 
 
-##### Phase 4: Analysis
+#### Phase 4: Analysis
 
 1. A transformation pipeline that creates event recommendations based on at least one algorithm.
 
@@ -168,30 +192,30 @@ Any and all underlying code should be checked in to GitHub in your fork of this 
 3. A (merged and closed) pull request from your feature branch (`phase_4`) to your master that covers all your code, utilities, notes, and so on.
 
 
-##### Phase 5: Iteration
+#### Phase 5: Iteration
 
 1. A transformation pipeline that creates event recommendations based on at least one additional enriched data set.
 
 2. A (merged and closed) pull request from your feature branch (`phase_5`) to your master that covers all your code, utilities, notes, and so on.
 
 
-## Background
+### Background
 
 This exercise was developed for the [CS 562: Big Data Algorithms](https://crab.rutgers.edu/~shende/cs562/index.html) course at Rutgers University Camden in the Fall 2018 term.  It was born out of conversations between me (Geoff) and Dr. [Sunil Shende](https://shende.camden.rutgers.edu/), the Graduate Program Director for the Rutgers [MS program in Scientific Computing](https://cs.camden.rutgers.edu/graduate/scientific-computing/).  Dr. Shende's MS program aims to prepare students for industry careers in engineering and data science, and I was asked if I could create a project that mirrored a real life problem.  To that end, this exercise is intended to be a challenging but straightforward project graduates could encounter upon entering the workforce.  One that asks a lot of them on many fronts - from pull requests to html to provisioning AWS services - in addition to the "real work" of data science algorithms.
 
 Many thanks to Dr. Shende for the opportunity to work with him and his class.  Hopefully, everyone has fun with the experiment.
 
 
-## Resources
+### Resources
 
 #### Data
 
-   * (`events.json.gz`)[data/events.json.gz]
-   * (`DMA-zip.csv.gz`)[data/DMA-zip.csv.gz]
+   * [`events.json.gz`](data/events.json.gz)
+   * [`DMA-zip.csv.gz`](data/DMA-zip.csv.gz)
    * Whatever else you can dream up!
 
 
 #### Links
 
-   * (DMA background)[https://en.wikipedia.org/wiki/Media_market]
-   * (`DMA_zip.csv` source data)[https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/IVXEHT]
+   * [DMA background](https://en.wikipedia.org/wiki/Media_market)
+   * [`DMA_zip.csv` source data](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/IVXEHT)

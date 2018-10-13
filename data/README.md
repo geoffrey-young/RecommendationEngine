@@ -4,8 +4,8 @@ This directory contains the initial data sources for this project.
 
 | File | Description |
 | -------------- | --- |
-| **[`events.json.gz`](events.json)** | The full set of event data for this project |
-| **[`DMA-zip.csv.gz`](DMA-zip.csv)** | A crosswalk of zipcode and DMA identifier, used to enrich event data |
+| **[`events.json.gz`](events.json.gz)** | The full set of event data for this project |
+| **[`DMA-zip.csv.gz`](DMA-zip.csv.gz)** | A crosswalk of zipcode and DMA identifier, used to enrich event data |
 
 Details for each data set follow.
 
