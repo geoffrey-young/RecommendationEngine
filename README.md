@@ -28,7 +28,7 @@
 
 Welcome to *Let's Build a Recommendation Engine*!
 
-Whether you are aware of it or not, you are exposed to recommendation engines all the time.  Or at least the output of a recommendation engine, generally in the form of "You might also like..." suggestions on websites like Amazon, Netflix, and just about any other mainstream service.  Industry wide, companies spend millions and millions of dollars in the care and feeding of recommendation engines.  Why?  Because recommendations lead to increased revenue.  Lots of revenue.  So much so that back in 2006 Netflix created the [Netflix Prize](https://www.netflixprize.com/) and offered a cool **one million dollars** to the first person (or team) that could best the Netflix algorithm by more than 10%.  (Note: it took *3 years*).
+Whether you are aware of it or not, you are exposed to recommendation engines all the time.  Or at least the output of a recommendation engine, generally in the form of *"You might also like..."* suggestions on websites like Amazon, Netflix, and just about any other mainstream service.  Industry wide, companies spend millions and millions of dollars in the care and feeding of recommendation engines.  Why?  Because recommendations lead to increased revenue.  Lots of revenue.  So much so that back in 2006 Netflix created the [Netflix Prize](https://www.netflixprize.com/) and offered a cool **one million dollars** to the first person (or team) that could best the Netflix algorithm by more than 10%.  (Note: it took *3 years*).
 
 Needless to say, some of the best minds in the world are working on various implementations of recommendation engines in a wide variety of problem spaces... and you are about to be one of them.
 
@@ -36,14 +36,15 @@ Needless to say, some of the best minds in the world are working on various impl
 
 In this project you will be creating a recommendation engine for an event ticketing system.
 
-Starting from a set of data consisting of events (concerts, festivals, etc) and associated details, you will be generating recommendations for a "You might also be interested in..." display on a website.  You will be responsible for designing and implementing a data processing pipeline, enriching the core data with additional data sets, designing recommendation algorithms, and the web application that displays the end results.
+Starting from a set of [data](data/) consisting of 81,494 events (concerts, festivals, etc) and associated details from January 1, 2016 onward, you will be generating recommendations for a *"You might also be interested in..."* display on a website.  You will be responsible for designing and implementing a data processing pipeline, enriching the core data with additional data sets, designing recommendation algorithms, and the web application that displays the end results.
 
 
 ### Approach
 
 Think of this as a proof of concept exercise you could be tasked with day one at a new job - you are handed a raw data set and expected to show off your work in a presentation to the head of Product Development after a few sprints.  This project, if worked through to completion, will prepare you for that day.
 
-Heavy use of AWS is strongly encouraged.  In fact, this entire project could be tackled using only the [AWS Always Free Tier](https://aws.amazon.com/free/?nc2=h_ql_pr&awsf.Free%20Tier%20Types=categories%23alwaysfree) via a clever combination of [Lambda](https://aws.amazon.com/lambda/), [Glue](https://aws.amazon.com/glue/), and [DynamoDB](https://aws.amazon.com/dynamodb/).  Other approaches using more idiomatic AWS tools and services will be suggested along the way.  In the end, however, you ought to explore and ultimately use whatever tools capture your interest and imagination.
+Heavy use of [Amazon Web Services](https://aws.amazon.com/) is strongly encouraged.  In fact, this entire project could be tackled using only the [AWS Always Free Tier](https://aws.amazon.com/free/?nc2=h_ql_pr&awsf.Free%20Tier%20Types=categories%23alwaysfree) via a clever combination of [Lambda](https://aws.amazon.com/lambda/), [Glue](https://aws.amazon.com/glue/), and [DynamoDB](https://aws.amazon.com/dynamodb/).  Other approaches using more idiomatic AWS tools and services will be suggested along the way.  In the end, however, you ought to explore and ultimately use whatever tools capture your interest and imagination.
+
 
 ### Phases
 
@@ -55,7 +56,7 @@ The project is broken up into several phases, each with its own deliverables.
    * Analysis
    * Iteration
 
-Note that the order of the phases is specific and intentional - the Iteration phase is where you will spend the bulk of your time, both on this project and at your job.  Getting the proper scaffolding in place so you can iterate on your ideas quickly is the key to happiness and success.
+Note that the order of the phases is specific and intentional - while the Iteration phase is where you will spend the bulk of your time, both on this project and at your job, getting the proper scaffolding in place so you can iterate on your ideas quickly is the key to happiness and success.
 
 #### Phase 1: Pipeline
 
@@ -83,7 +84,7 @@ Now that you have both clean data and a repeatable way of generating it when it 
 
 Running a visualization from a big data tool like EMR, Hive, RedShift, etc is way too slow - these tools are great for data crunching, but once you have the results they belong in a metadata store for quick, easy access.  Therefore, the final step in your data pipeline should be to offload computed recommendations to a datastore that fits your use case.  For example, in a real application loading recommendations into Elasticsearch would not only allow for low-latency requests for display, but would also allow for faceting and filtering of results on demand.
 
-Building on the AWS approach in Phase 1, the suggested approach would be to
+Building on the AWS approach in Phase 1, the suggested approach is to
 
    * Use an AWS Lambda routine to load the transformed parquet files from Phase 1 to DynamoDB
    * Create a serverless web application with AWS API Gateway, Lambda, and DynamoDB.
@@ -99,9 +100,9 @@ The display doesn't need to be anything fancy - remember, this is a PoC and you 
 
 Now we start getting to the fun part.
 
-At this point, you should be able to go to a web page and see the data from `events.json` for a single event.  It's time to show some recommendations along with it.
+At this point, you should be able to go to a web page and see the data from `events.json.gz` for a single event.  It's time to show some recommendations along with it.
 
-Whatever recommendations your amazing algorithms come up with, if the user lives in Philadelphia but your recommendation is in Wisconsin it's not going to be terribly useful.  With the base event data enriched with some basic (DMA)[https://en.wikipedia.org/wiki/Media_market] information, we can map events to a geographic area and group them together.
+Whatever recommendations your amazing algorithms come up with, if the user lives in Philadelphia but your recommendation is in Wisconsin it's not going to be terribly useful.  With the base event data enriched with some basic [DMA](https://en.wikipedia.org/wiki/Media_market) information, we can map events to a geographic area and group them together.
 
 The enrichment phase asks you to pull in DMA codes and descriptions from `DMA-zip.csv.gz` and add that data to each event record based on the venue zipcode.  The result of this enrichment will allow recommendations for an event in Media, PA to include events in Haddon Township, NJ but not in Boston, MA.
 
@@ -120,7 +121,7 @@ At this point, you have an established framework for processing, enriching, and 
 
 What makes for a good recommendation?  That is the question.  
 
-With the addition of DMA data to your data set, you already have enough to show "Other Events in Your Area..." suggestions.  As it turns out, showing *any* recommendation is better than showing no recommendations, so your PoC project is adding value already!  We can do even more just with the event data we have on hand.
+With the addition of DMA data to your data set, you already have enough to show *"Other Events in Your Area..."* suggestions.  As it turns out, showing *any* recommendation is better than showing no recommendations, so your PoC project is adding value already!  We can do even more just with the event data we have on hand.
 
 You have some basic event details to work with such as the name and description of the event.  Finding events with similar names and/or descriptions is a great place to start.
 
@@ -148,6 +149,8 @@ There is no "best recommendation" or right answer, so explore the data and your 
 
 Any and all underlying code should be checked in to GitHub in your fork of this repo.  For example, if you create a Python script for use in an AWS Glue job, check it in to `glue/scripts/`, a one-off script for fetching public data might go into `utils/`, etc.
 
+Every Phase must include a diagram documenting your ecosystem - what components you are using, what scripts and routines are involved, etc.  You can start start with [this template](https://drive.google.com/file/d/1v3l9bKkw5MWRXFgzkYfLiFeNpNao7WN6/view?usp=sharing).
+
 #### Phase 1: Pipeline
 
 1. A transformation pipeline that cleans and normalizes incoming data.  Transformations *must* include:
@@ -156,7 +159,9 @@ Any and all underlying code should be checked in to GitHub in your fork of this 
 
    * Normalizing the data to remove extraneous characters (embedded newlines, non-renderable UTF-8 symbols, etc).
 
-2. A (merged and closed) pull request from your feature branch (`phase_1`) to your master that covers all your code, utilities, notes, and so on.
+2. An exported PNG [draw.io](https://www.draw.io) diagram representing your pipeline.
+
+3. A (merged and closed) pull request from your feature branch (`phase_1`) to your master that covers all your code, utilities, notes, and so on.
 
 (*) If you start using this datetime format and stick to UTC now you'll be extremely thankful later on in your career.
 
@@ -167,7 +172,9 @@ Any and all underlying code should be checked in to GitHub in your fork of this 
 
 2. A web-based display that can query the datastore and display results for a single, known event id.
 
-3. A (merged and closed) pull request from your feature branch (`phase_2`) to your master that covers all your code, utilities, notes, and so on.
+3. An exported PNG [draw.io](https://www.draw.io) diagram representing your ecosystem, including Phase 1.
+
+4. A (merged and closed) pull request from your feature branch (`phase_2`) to your master that covers all your code, utilities, notes, and so on.
 
 
 #### Phase 3: Enrichment
@@ -176,7 +183,9 @@ Any and all underlying code should be checked in to GitHub in your fork of this 
 
 2. Display of the event's DMA name in your web application.
 
-3. A (merged and closed) pull request from your feature branch (`phase_3`) to your master that covers all your code, utilities, notes, and so on.
+3. An exported PNG [draw.io](https://www.draw.io) diagram representing your ecosystem, including Phase 2.
+
+4. A (merged and closed) pull request from your feature branch (`phase_3`) to your master that covers all your code, utilities, notes, and so on.
 
 
 #### Phase 4: Analysis
@@ -189,14 +198,18 @@ Any and all underlying code should be checked in to GitHub in your fork of this 
    * The event name, description, venue name and address (for visual human "relevancy scoring")
    * The reason for the recommendation, such as "Based on events in a similar location" or "Based on events with *wine* in their name"
 
-3. A (merged and closed) pull request from your feature branch (`phase_4`) to your master that covers all your code, utilities, notes, and so on.
+3. An exported PNG [draw.io](https://www.draw.io) diagram representing your ecosystem, including Phase 3.
+
+4. A (merged and closed) pull request from your feature branch (`phase_4`) to your master that covers all your code, utilities, notes, and so on.
 
 
 #### Phase 5: Iteration
 
 1. A transformation pipeline that creates event recommendations based on at least one additional enriched data set.
 
-2. A (merged and closed) pull request from your feature branch (`phase_5`) to your master that covers all your code, utilities, notes, and so on.
+2. An exported PNG [draw.io](https://www.draw.io) diagram representing your entire ecosystem.
+
+3. A (merged and closed) pull request from your feature branch (`phase_5`) to your master that covers all your code, utilities, notes, and so on.
 
 
 ### Background
@@ -210,9 +223,12 @@ Many thanks to Dr. Shende for the opportunity to work with him and his class.  H
 
 #### Data
 
+Initial data sets can be found in the [`data/`](data/) directory in this repo
+
    * [`events.json.gz`](data/events.json.gz)
    * [`DMA-zip.csv.gz`](data/DMA-zip.csv.gz)
-   * Whatever else you can dream up!
+
+plus whatever other data sources you can dream up.
 
 
 #### Links

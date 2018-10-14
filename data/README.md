@@ -1,17 +1,29 @@
 # Project Source Data
 
+<!-- toc -->
+
+- [Introduction](#introduction)
+- [Event Data](#event-data)
+- [DMA Data](#dma-data)
+
+<!-- tocstop -->
+
+
+## Introduction
+
 This directory contains the initial data sources for this project.
 
 | File | Description |
 | -------------- | --- |
-| **[`events.json.gz`](events.json.gz)** | The full set of event data for this project |
-| **[`DMA-zip.csv.gz`](DMA-zip.csv.gz)** | A crosswalk of zipcode and DMA identifier, used to enrich event data |
+| [`events.json.gz`](events.json.gz) | The full set of event data for this project |
+| [`DMA-zip.csv.gz`](DMA-zip.csv.gz) | A crosswalk of zipcode and DMA identifier, used to enrich event data |
 
 Details for each data set follow.
 
-#### Event Data
 
-`events.json.gz` contains all the events to be included in this exercise.
+## Event Data
+
+`events.json.gz` contains all the events to be included in this exercise.  81,494 events, to be exact.
 
 Consider this file to be the master event data - the kind of data that a customer service representative might update but that you, as a developer, must consdier immutable.  Whatever transformations you will perform on the data will take the form of an enriched data set stored in another, more appropriate system.
 
@@ -44,7 +56,8 @@ You can assume `event_id` is unique and that `organization_id` can be used as a 
 
 To give credit where credit is due, these events are real and come to you courtesy of TicketLeap and their public event API.  They were gleaned in a very polite manner, and have been sanitized slightly to remove URLs, images, and other fields not relevant to the exercise at hand.  Given that, please, please don't go out to TicketLeap and hammer their servers looking for more event details to improve your engine - all you need in terms of base event information is here, and it would be both bad form and bad karma to needlessly saturate their public API again just to end up with the same set of data.  Major points off if my friends at TicketLeap slack me about a surge in API activity.
 
-#### DMA Data
+
+## DMA Data
 
 `DMA-zip.csv.gz` is a crosswalk between DMAs, County, State and Zip Codes as of 2016, courtesy of the [Geographic Information on Designated Media Markets](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/IVXEHT) archive in the [Harvard Dataverse](https://dataverse.harvard.edu/).
 
