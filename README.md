@@ -73,6 +73,15 @@ While there are many different tools and technologies you could use, building yo
 
 I can speak from experience that, coming to AWS Glue cold, this can be accomplished in a day, troubleshooting and all.
 
+When this phase is complete, you will have a pipeline that looks similar to this:
+
+![](img/phase1.png)
+
+If you plug in [AWS Athena](https://aws.amazon.com/athena/) (as you will in Phase 2) you can easily query your results using SQL:
+
+![](img/phase1a.png)
+
+
 A good place to start after [reading up on AWS Glue](https://aws.amazon.com/glue/getting-started/) is the [Data cleaning with AWS Glue](https://github.com/aws-samples/aws-glue-samples/blob/master/examples/data_cleaning_and_lambda.md) tutorial.  Another, more graphic example, is [Build a Data Lake Foundation with AWS Glue and Amazon S3](https://aws.amazon.com/blogs/big-data/build-a-data-lake-foundation-with-aws-glue-and-amazon-s3/).
 
 It is worth noting that you need to create a custom JSON classifier for the Glue crawler due to the size of `events.json.gz` - see the solution [here](https://forums.aws.amazon.com/message.jspa?messageID=842705#842705).  Also, keep it in its compressed form in S3 - Glue seems to behave better.
@@ -91,9 +100,17 @@ Building on the AWS approach in Phase 1, the suggested approach is to
 
 A simple way to use Lambda to read from parquet is to use [AWS Athena](https://aws.amazon.com/athena/).  Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.
 
-A full tutorial on building a serverless web application can be found [here](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/).  You don't need to worry about user authentication.
+A full tutorial on building a serverless web application can be found [here](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/).  In the end, you will have an architecture like this:
 
-The display doesn't need to be anything fancy - remember, this is a PoC and you only have text to work with, so a simple, structure result page is fine.  Keep in mind that this page will also be used to display your recommendations in Phase 4.
+![](img/webapp.png)
+
+You don't need to worry about user authentication, so feel free to skip that part in the tutorial.
+
+The display doesn't need to be anything fancy - remember, this is a PoC and you only have text to work with, so a simple, structure result page is fine.
+
+![](img/mapitout.png)
+
+Keep in mind that this page will also be used to display your recommendations in Phase 4.
 
 
 #### Phase 3: Enrichment
@@ -129,6 +146,10 @@ Once you can relate one event to another, start thinking about what storage and 
 
 Given the small data set, event dates can be ignored as you find recommendations for suggestion - you wouldn't want to recommend past events in a real application (that would just make people feel bad they missed it) but for the purposes of this project don't worry about incorporating date logic.  Of course, if you wanted to you could, now that all your dates are standardized as a result of your Phase 1 data normalization.  How convenient.
 
+Your resulting recommendation web page might look similar to this:
+
+![](img/mapitout-recs.png)
+
 #### Phase 5: Iteration
 
 Now that you have some recommendation basics flowing, it's time to really put some thought into both expanding and refining recommendations.  It is far trickier than you might think.  For example:
@@ -147,9 +168,11 @@ There is no "best recommendation" or right answer, so explore the data and your 
 
 ### Deliverables
 
-Any and all underlying code should be checked in to GitHub in your fork of this repo.  For example, if you create a Python script for use in an AWS Glue job, check it in to `glue/scripts/`, a one-off script for fetching public data might go into `utils/`, etc.
+Your work should be checked in to your fork of [this repository](https://github.com/geoffrey-young/RecommendationEngine), with pull requests generated using the [GitHub Standard Fork & Pull Request Workflow]https://gist.github.com/Chaser324/ce0505fbed06b947d962).  Any and all underlying code, diagrams, etc should be checked in.  For example, if you create a Python script for use in an AWS Glue job, check it in to `glue/scripts/`, a one-off script for fetching public data might go into `utils/`, etc.  Step by step instructions for getting GitHub set up are available [here](https://help.github.com/articles/fork-a-repo/).
 
-Every Phase must include a diagram documenting your ecosystem - what components you are using, what scripts and routines are involved, etc.  You can start start with [this template](https://drive.google.com/file/d/1v3l9bKkw5MWRXFgzkYfLiFeNpNao7WN6/view?usp=sharing).
+Every Phase must include a diagram documenting your ecosystem - what components you are using, what scripts and routines are involved, etc.  [draw.io](https://www.draw.io) is a solid, free diagram tool that integrates well with Google Drive.  You can start start with [this draw.io template](https://drive.google.com/file/d/1v3l9bKkw5MWRXFgzkYfLiFeNpNao7WN6/view?usp=sharing).
+
+Individual deliverables for each phase are listed below.
 
 #### Phase 1: Pipeline
 
@@ -159,7 +182,7 @@ Every Phase must include a diagram documenting your ecosystem - what components 
 
    * Normalizing the data to remove extraneous characters (embedded newlines, non-renderable UTF-8 symbols, etc).
 
-2. An exported PNG [draw.io](https://www.draw.io) diagram representing your pipeline.
+2. A diagram (exported as a `png`) representing your pipeline and its components.
 
 3. A (merged and closed) pull request from your feature branch (`phase_1`) to your master that covers all your code, utilities, notes, and so on.
 
@@ -172,7 +195,7 @@ Every Phase must include a diagram documenting your ecosystem - what components 
 
 2. A web-based display that can query the datastore and display results for a single, known event id.
 
-3. An exported PNG [draw.io](https://www.draw.io) diagram representing your ecosystem, including Phase 1.
+3. A diagram (exported as a `png`) representing your ecosystem, including Phase 1.
 
 4. A (merged and closed) pull request from your feature branch (`phase_2`) to your master that covers all your code, utilities, notes, and so on.
 
@@ -183,7 +206,7 @@ Every Phase must include a diagram documenting your ecosystem - what components 
 
 2. Display of the event's DMA name in your web application.
 
-3. An exported PNG [draw.io](https://www.draw.io) diagram representing your ecosystem, including Phase 2.
+3. A diagram (exported as a `png`) representing your ecosystem, including Phase 2.
 
 4. A (merged and closed) pull request from your feature branch (`phase_3`) to your master that covers all your code, utilities, notes, and so on.
 
@@ -198,7 +221,7 @@ Every Phase must include a diagram documenting your ecosystem - what components 
    * The event name, description, venue name and address (for visual human "relevancy scoring")
    * The reason for the recommendation, such as "Based on events in a similar location" or "Based on events with *wine* in their name"
 
-3. An exported PNG [draw.io](https://www.draw.io) diagram representing your ecosystem, including Phase 3.
+3. A diagram (exported as a `png`) representing your ecosystem, including Phase 3.
 
 4. A (merged and closed) pull request from your feature branch (`phase_4`) to your master that covers all your code, utilities, notes, and so on.
 
@@ -207,7 +230,7 @@ Every Phase must include a diagram documenting your ecosystem - what components 
 
 1. A transformation pipeline that creates event recommendations based on at least one additional enriched data set.
 
-2. An exported PNG [draw.io](https://www.draw.io) diagram representing your entire ecosystem.
+2. A diagram (exported as a `png`) representing your entire ecosystem.
 
 3. A (merged and closed) pull request from your feature branch (`phase_5`) to your master that covers all your code, utilities, notes, and so on.
 
