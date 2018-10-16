@@ -170,7 +170,7 @@ There is no "best recommendation" or right answer, so explore the data and your 
 
 ### Deliverables
 
-Your work should be checked in to your fork of [this repository](https://github.com/geoffrey-young/RecommendationEngine), with pull requests generated using the [GitHub Standard Fork & Pull Request Workflow]https://gist.github.com/Chaser324/ce0505fbed06b947d962).  Any and all underlying code, diagrams, etc should be checked in.  For example, if you create a Python script for use in an AWS Glue job, check it in to `glue/scripts/`, a one-off script for fetching public data might go into `utils/`, etc.  Step by step instructions for getting GitHub set up are available [here](https://help.github.com/articles/fork-a-repo/).
+Your work should be checked in to your fork of [this repository](https://github.com/geoffrey-young/RecommendationEngine), with pull requests generated using the [GitHub Standard Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962).  Any and all underlying code, diagrams, etc should be checked in.  For example, if you create a Python script for use in an AWS Glue job, check it in to `glue/scripts/`, a one-off script for fetching public data might go into `utils/`, etc.  Step by step instructions for getting GitHub set up are available [here](https://help.github.com/articles/fork-a-repo/).
 
 Every Phase must include a diagram documenting your ecosystem - what components you are using, what scripts and routines are involved, etc.  [draw.io](https://www.draw.io) is a solid, free diagram tool that integrates well with Google Drive.  You can start start with [this draw.io template](https://drive.google.com/file/d/1v3l9bKkw5MWRXFgzkYfLiFeNpNao7WN6/view?usp=sharing).
 
@@ -267,4 +267,5 @@ plus whatever other data sources you can dream up.
    * [draw.io](https://www.draw.io)
    * [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)
    * [DMA background](https://en.wikipedia.org/wiki/Media_market)
-   * [`DMA_zip.csv` source data](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/IVXEHT)
+   * [Project source data `README`](data/README.md)
+   * [The original GitHub repo for this project](https://github.com/geoffrey-young/RecommendationEngine/)
