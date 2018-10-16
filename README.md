@@ -130,6 +130,8 @@ To continue building  the AWS Glue pipeline, you might
    * Create a new Glue job that reads the parquet transformations from Phase 1, applies the mapping, and outputs the mapped data to parquet
    * Create a Glue crawler for the transformed parquet data
 
+![](img/phase3.png)
+
 If you followed this path, you would need to change your load routines to point to a Athena data source.  Another option is to make the Glue job from Phase 1 into a more monolithic codebase that does all your transformations and mappings.  Think about the benefits of each approach as you go.  Remember, the main cost of an application is in the maintainance not the development - how can you make your life easier as you add new logic and routines?
 
 #### Phase 4: Analysis
