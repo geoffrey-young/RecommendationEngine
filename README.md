@@ -104,7 +104,7 @@ A simple way to use Lambda to read from parquet is to use [AWS Athena](https://a
 
 Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.
 
-For the second part, a full tutorial on building a serverless web application can be found [here](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/).  In the end, you will have an architecture like this:
+For the second part, a full tutorial on building a serverless web application can be found [here](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/).  For the display step, you will have an architecture like this:
 
 ![](img/phase2b.png)
 
