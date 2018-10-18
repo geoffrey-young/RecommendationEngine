@@ -98,11 +98,15 @@ Building on the AWS approach in Phase 1, the suggested approach is to
    * Use an AWS Lambda routine to load the transformed parquet files from Phase 1 to DynamoDB
    * Create a serverless web application with AWS API Gateway, Lambda, and DynamoDB.
 
-A simple way to use Lambda to read from parquet is to use [AWS Athena](https://aws.amazon.com/athena/).  Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.
+A simple way to use Lambda to read from parquet is to use [AWS Athena](https://aws.amazon.com/athena/).
 
-A full tutorial on building a serverless web application can be found [here](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/).  In the end, you will have an architecture like this:
+![](img/phase2b.png)
 
-![](img/webapp.png)
+Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.
+
+For the second part, a full tutorial on building a serverless web application can be found [here](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/).  In the end, you will have an architecture like this:
+
+![](img/phase2b.png)
 
 You don't need to worry about user authentication, so feel free to skip that part in the tutorial.
 
