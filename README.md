@@ -100,7 +100,7 @@ Building on the AWS approach in Phase 1, the suggested approach is to
 
 A simple way to use Lambda to read from parquet is to use [AWS Athena](https://aws.amazon.com/athena/).
 
-![](img/phase2b.png)
+![](img/phase2a.png)
 
 Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.
 
