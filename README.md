@@ -20,6 +20,7 @@
 - [Background](#background)
 - [Resources](#resources)
   * [Data](#data)
+  * [Code Examples](#code-examples)
   * [Links](#links)
 
 <!-- tocstop -->
@@ -254,13 +255,16 @@ Many thanks to Dr. Shende for the opportunity to work with him and his class.  H
 
 #### Data
 
-Initial data sets can be found in the [`data/`](data/) directory in this repo
+Initial data sets can be found in the [`data/`](data/) directory in this repo.
 
    * [`events.json.gz`](data/events.json.gz)
    * [`DMA-zip.csv.gz`](data/DMA-zip.csv.gz)
 
 plus whatever other data sources you can dream up.
 
+#### Code Examples
+
+Some code examples to get you started can be found in the [`code/`](code/) directory in this repo.
 
 #### Links
 
