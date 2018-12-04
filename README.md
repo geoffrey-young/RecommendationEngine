@@ -84,7 +84,9 @@ If you plug in [AWS Athena](https://aws.amazon.com/athena/) (as you will in Phas
 
 A good place to start after [reading up on AWS Glue](https://aws.amazon.com/glue/getting-started/) is the [Data cleaning with AWS Glue](https://github.com/aws-samples/aws-glue-samples/blob/master/examples/data_cleaning_and_lambda.md) tutorial.  Another, more graphic example, is [Build a Data Lake Foundation with AWS Glue and Amazon S3](https://aws.amazon.com/blogs/big-data/build-a-data-lake-foundation-with-aws-glue-and-amazon-s3/).
 
-It is worth noting that you need to create a custom JSON classifier for the Glue crawler due to the size of `events.json.gz` - see the solution [here](https://forums.aws.amazon.com/message.jspa?messageID=842705#842705).  Also, keep it in its compressed form in S3 - Glue seems to behave better.
+It is worth noting that you need to create a custom JSON classifier for the Glue crawler due to the size of `events.json.gz` - see the solution [here](https://forums.aws.amazon.com/message.jspa?messageID=842705#842705) as well as the screenshot of a working classifier [here](img/glue_classifier.png).  Also, keep it in its compressed form in S3 - Glue seems to behave better.
+
+A [sample Glue job](code/glue_job.py) with an example of adding additional transformations and filters can be found in the [code directory](code/).
 
 
 #### Phase 2: Display
@@ -102,7 +104,7 @@ A simple way to use Lambda to read from parquet is to use [AWS Athena](https://a
 
 ![](img/phase2a.png)
 
-Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.
+Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.  There is [a Lambda function](code/lambda_function.py) in the [code directory](code/) that can get you started moving data from parquet to DynamoDB.
 
 For the second part, a full tutorial on building a serverless web application can be found [here](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/).  For the display step, you will have an architecture like this:
 
