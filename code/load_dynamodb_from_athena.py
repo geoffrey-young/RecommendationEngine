@@ -10,8 +10,16 @@
 #   img/lambda_iam_policies.png
 # 
 # for an example.
+#
+# in order to get all 81,494 events loaded into DynamoDB using this
+# script I adjusted DynamoDB from Provisioned to On Demand (see
+# the Capacity tab in the AWS console), as the Provisioned defaults
+# would not load all records in the 15 minute max Lambda runtime.
+# using On Demand DynamoDB resources, this script loaded all events
+# in 3 minutes (after one failure while DynamoDB scaled to the
+# appropriate volume)
 
-from pprint import pprint
+# python 2.7
 import time
 import json
 import boto3
@@ -21,10 +29,7 @@ ATHENA_TABLE = 'transformed_processed_events'
 DYNAMODB_TABLE = 'events'
 S3_OUTPUT = 's3://lambda-query-output'
 S3_BUCKET = 'events_lambda_output'
-
-# boto3 can handle page sizes up to 1000, both for reads from Athena
-# as well as writes to DynamoDB.  so bump this up for large data movements.
-PAGE_SIZE = 5
+PAGE_SIZE = 500
 
 # number of athena read retries
 RETRY_COUNT = 10
@@ -32,7 +37,7 @@ RETRY_COUNT = 10
 def lambda_handler(event, context):
 
     # you will want a different query, obviously
-    query = "select event_id, venue_city, venue_state, event_name from {} where event_name like '%wine%' order by event_id limit 20".format(ATHENA_TABLE)
+    query = "select * from {} order by event_id".format(ATHENA_TABLE)
 
     athena = boto3.client('athena')
 
@@ -47,7 +52,7 @@ def lambda_handler(event, context):
     )
 
     query_execution_id = response['QueryExecutionId']
-    print(query_execution_id)
+    print("executing query {}".format(query_execution_id))
 
     for i in range(1, 1 + RETRY_COUNT):
 
@@ -55,18 +60,18 @@ def lambda_handler(event, context):
         query_execution_status = query_status['QueryExecution']['Status']['State']
 
         if query_execution_status == 'SUCCEEDED':
-            print("STATUS:" + query_execution_status)
+            print("STATUS: {}".format(query_execution_status))
             break
 
         if query_execution_status == 'FAILED':
-            raise Exception("STATUS:" + query_execution_status)
+            raise Exception("STATUS: {}".format(query_execution_status))
 
         else:
-            print("STATUS:" + query_execution_status)
+            print("STATUS: {}... checking again in {} seconds".format(query_execution_status, i))
             time.sleep(i)
     else:
         athena.stop_query_execution(QueryExecutionId=query_execution_id)
-        raise Exception('TIME OVER')
+        raise Exception('QUERY TIMED OUT')
     
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(DYNAMODB_TABLE)
@@ -83,18 +88,21 @@ def lambda_handler(event, context):
     )
     
     for result in results_iterator:
-        
+
+        print("starting record set {}".format(count + 1))
+
         if not keys:
             keys = [c['VarCharValue'].encode('ascii','ignore') for c in result['ResultSet']['Rows'][0]['Data']]
             result['ResultSet']['Rows'].pop(0)
-        
+
         with table.batch_writer(overwrite_by_pkeys=['event_id', 'event_id']) as batch:
             for row in result['ResultSet']['Rows']:
                 values = [c.get('VarCharValue','').encode('ascii','ignore') for c in row['Data']]
                 item = dict(zip(keys, values))
                 filtered = dict((k,v) for k,v in item.iteritems() if v)
                 batch.put_item(Item=filtered)
-                #pprint("added {}".format(json.dumps(item)))
                 count += 1
+
+        print("finished writing {} total records".format(count))
         
     return count
