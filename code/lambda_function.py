@@ -90,9 +90,10 @@ def lambda_handler(event, context):
         
         with table.batch_writer(overwrite_by_pkeys=['event_id', 'event_id']) as batch:
             for row in result['ResultSet']['Rows']:
-                values = [c['VarCharValue'].encode('ascii','ignore') for c in row['Data']]
+                values = [c.get('VarCharValue','').encode('ascii','ignore') for c in row['Data']]
                 item = dict(zip(keys, values))
-                batch.put_item(Item=item)
+                filtered = dict((k,v) for k,v in item.iteritems() if v)
+                batch.put_item(Item=filtered)
                 #pprint("added {}".format(json.dumps(item)))
                 count += 1
         
