@@ -72,12 +72,12 @@ def lambda_handler(event, context):
     else:
         athena.stop_query_execution(QueryExecutionId=query_execution_id)
         raise Exception('QUERY TIMED OUT')
-    
+
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(DYNAMODB_TABLE)
     keys = None
     count = 0
-        
+
     results_paginator = athena.get_paginator('get_query_results')
     results_iterator = results_paginator.paginate(
         QueryExecutionId=query_execution_id,
@@ -86,7 +86,7 @@ def lambda_handler(event, context):
             'StartingToken': None
         }
     )
-    
+
     for result in results_iterator:
 
         print("starting record set {}".format(count + 1))
@@ -104,5 +104,5 @@ def lambda_handler(event, context):
                 count += 1
 
         print("finished writing {} total records".format(count))
-        
+
     return count
