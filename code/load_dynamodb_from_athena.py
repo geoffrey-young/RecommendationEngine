@@ -81,7 +81,7 @@ def lambda_handler(event, context):
     results_paginator = athena.get_paginator('get_query_results')
     results_iterator = results_paginator.paginate(
         QueryExecutionId=query_execution_id,
-            PaginationConfig={
+        PaginationConfig={
             'PageSize': PAGE_SIZE,
             'StartingToken': None
         }
