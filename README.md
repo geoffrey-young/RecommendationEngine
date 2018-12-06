@@ -25,6 +25,7 @@
 
 <!-- tocstop -->
 
+
 ### Introduction
 
 Welcome to *Let's Build a Recommendation Engine*!
@@ -32,6 +33,7 @@ Welcome to *Let's Build a Recommendation Engine*!
 Whether you are aware of it or not, you are exposed to recommendation engines all the time.  Or at least the output of a recommendation engine, generally in the form of *"You might also like..."* suggestions on websites like Amazon, Netflix, and just about any other mainstream service.  Industry wide, companies spend millions and millions of dollars in the care and feeding of recommendation engines.  Why?  Because recommendations lead to increased revenue.  Lots of revenue.  So much so that back in 2006 Netflix created the [Netflix Prize](https://www.netflixprize.com/) and offered a cool **one million dollars** to the first person (or team) that could best the Netflix algorithm by more than 10%.  (Note: it took *3 years*).
 
 Needless to say, some of the best minds in the world are working on various implementations of recommendation engines in a wide variety of problem spaces... and you are about to be one of them.
+
 
 ### The Project
 
@@ -44,7 +46,7 @@ Starting from a set of [data](data/) consisting of 81,494 events (concerts, fest
 
 Think of this as a proof of concept exercise you could be tasked with day one at a new job - you are handed a raw data set and expected to show off your work in a presentation to the head of Product Development after a few sprints.  This project, if worked through to completion, will prepare you for that day.
 
-Heavy use of [Amazon Web Services](https://aws.amazon.com/) is strongly encouraged.  In fact, this entire project could be tackled using only the [AWS Always Free Tier](https://aws.amazon.com/free/?nc2=h_ql_pr&awsf.Free%20Tier%20Types=categories%23alwaysfree) via a clever combination of [Lambda](https://aws.amazon.com/lambda/), [Glue](https://aws.amazon.com/glue/), and [DynamoDB](https://aws.amazon.com/dynamodb/).  Other approaches using more idiomatic AWS tools and services will be suggested along the way.  In the end, however, you ought to explore and ultimately use whatever tools capture your interest and imagination.
+Heavy use of [Amazon Web Services](https://aws.amazon.com/) is strongly encouraged.  In fact, I suspect this entire project could be tackled using only the [AWS Always Free Tier](https://aws.amazon.com/free/?nc2=h_ql_pr&awsf.Free%20Tier%20Types=categories%23alwaysfree) via a clever combination of [Lambda](https://aws.amazon.com/lambda/), [Glue](https://aws.amazon.com/glue/), and [DynamoDB](https://aws.amazon.com/dynamodb/).  Other approaches using more idiomatic AWS tools and services will be suggested along the way.  In the end, however, you ought to explore and ultimately use whatever tools capture your interest and imagination.
 
 
 ### Phases
@@ -57,7 +59,8 @@ The project is broken up into several phases, each with its own deliverables.
    * Analysis
    * Iteration
 
-Note that the order of the phases is specific and intentional - while the Iteration phase is where you will spend the bulk of your time, both on this project and at your job, getting the proper scaffolding in place so you can iterate on your ideas quickly is the key to happiness and success.
+Note that the order of the phases is specific and intentional - while the [Iteration phase](#phase-5-iteration) is where you will spend the bulk of your time, both on this project and at your job, getting the proper scaffolding in place so you can iterate on your ideas quickly is the key to happiness and success.
+
 
 #### Phase 1: Pipeline
 
@@ -82,7 +85,6 @@ If you plug in [AWS Athena](https://aws.amazon.com/athena/) (as you will in Phas
 
 ![](img/phase1a.png)
 
-
 A good place to start after [reading up on AWS Glue](https://aws.amazon.com/glue/getting-started/) is the [Data cleaning with AWS Glue](https://github.com/aws-samples/aws-glue-samples/blob/master/examples/data_cleaning_and_lambda.md) tutorial.  Another, more graphic example, is [Build a Data Lake Foundation with AWS Glue and Amazon S3](https://aws.amazon.com/blogs/big-data/build-a-data-lake-foundation-with-aws-glue-and-amazon-s3/).
 
 It is worth noting that you need to create a custom JSON classifier for the Glue crawler due to the size of `events.json.gz` - see the solution [here](https://forums.aws.amazon.com/message.jspa?messageID=842705#842705) as well as the screenshot of a working classifier [here](img/glue_classifier.png).  Also, keep it in its compressed form in S3 - Glue seems to behave better.
@@ -92,7 +94,7 @@ A [sample Glue job](code/glue_job.py) with an example of adding additional trans
 
 #### Phase 2: Display
 
-Now that you have both clean data and a repeatable way of generating it when it changes, it's time to build a way to peek into your results.  It may seem premature to focus on display now, but you are going to want to see the results of your recommendation algorithms as you experiment with them so taking care of the front end now will actually make your life easier in the long run.
+Now that you have both clean data and a repeatable way of generating it when it changes it's time to build a way to peek into your results.  It may seem premature to focus on display now, but you are going to want to see the results of your recommendation algorithms as you experiment with them so taking care of the front end now will actually make your life easier in the long run.
 
 Running a visualization from a big data tool like EMR, Hive, RedShift, etc is way too slow - these tools are great for data crunching, but once you have the results they belong in a metadata store for quick, easy access.  Therefore, the final step in your data pipeline should be to offload computed recommendations to a datastore that fits your use case.  For example, in a real application loading recommendations into Elasticsearch would not only allow for low-latency requests for display, but would also allow for faceting and filtering of results on demand.
 
@@ -105,13 +107,13 @@ A simple way to use Lambda to read from parquet is to use [AWS Athena](https://a
 
 ![](img/phase2a.png)
 
-Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.  There is [a Lambda function](code/lambda_function.py) in the [code directory](code/) that can get you started moving data from parquet to DynamoDB.
+Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.  There is [a Lambda function](code/load_dynamodb_from_athena.py) in the [code directory](code/) that can get you started moving data from parquet to DynamoDB via Athena.
 
 For the second part, a full tutorial on building a serverless web application can be found [here](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/).  For the display step, you will have an architecture like this:
 
 ![](img/phase2b.png)
 
-You don't need to worry about user authentication, so feel free to skip that part in the tutorial.
+You don't need to worry about user authentication, so feel free to skip that part in the tutorial.  There is [a Lambda function](code/get_event_from_dynamodb.py) in the [code directory](code/) that can serve as a starting point for your API Gateway backend.
 
 The display doesn't need to be anything fancy - remember, this is a PoC and you only have text to work with, so a simple, structure result page is fine.
 
@@ -128,7 +130,7 @@ At this point, you should be able to go to a web page and see the data from `eve
 
 Whatever recommendations your amazing algorithms come up with, if the user lives in Philadelphia but your recommendation is in Wisconsin it's not going to be terribly useful.  With the base event data enriched with some basic [DMA](https://en.wikipedia.org/wiki/Media_market) information, we can map events to a geographic area and group them together.
 
-The enrichment phase asks you to pull in DMA codes and descriptions from `DMA-zip.csv.gz` and add that data to each event record based on the venue zipcode.  The result of this enrichment will allow recommendations for an event in Media, PA to include events in Haddon Township, NJ but not in Boston, MA.
+The enrichment phase asks you to pull in DMA codes and descriptions from `DMA-zip.csv.gz` and add that data to each event record based on the venue zipcode.  The result of this enrichment will allow you to filter recommendations for an event in Media, PA to include events in Haddon Township, NJ but not in Boston, MA.
 
 To continue building  the AWS Glue pipeline, you might
 
@@ -139,7 +141,8 @@ To continue building  the AWS Glue pipeline, you might
 
 ![](img/phase3.png)
 
-If you followed this path, you would need to change your load routines to point to a Athena data source.  Another option is to make the Glue job from Phase 1 into a more monolithic codebase that does all your transformations and mappings.  Think about the benefits of each approach as you go.  Remember, the main cost of an application is in the maintainance not the development - how can you make your life easier as you add new logic and routines?
+If you followed this path, you would need to change your load routines to point to a Athena data source.  Another option is to make the Glue job from Phase 1 into a more monolithic codebase that does all your transformations and mappings.  Think about the benefits of each approach as you go.  Remember, the main cost of an application is in the maintenance not the development - how can you make your life easier as you add new logic and routines?
+
 
 #### Phase 4: Analysis
 
@@ -159,6 +162,7 @@ Your resulting recommendation web page might look similar to this:
 
 ![](img/mapitout-recs.png)
 
+
 #### Phase 5: Iteration
 
 Now that you have some recommendation basics flowing, it's time to really put some thought into both expanding and refining recommendations.  It is far trickier than you might think.  For example:
@@ -170,7 +174,7 @@ Think about ways to enrich the data in order to come up with different recommend
 
    * Are people interested in wine festivals also interested in beer festivals?  How would you find out?
    * How do hashtags relate across events?  What data enrichment would help?
-   * Are events a certain distance away more intersting that events in the same DMA?
+   * Are events a certain distance away more interesting that events in the same DMA?
 
 There is no "best recommendation" or right answer, so explore the data and your ideas with gusto and see where they lead.
 
@@ -182,6 +186,7 @@ Your work should be checked in to your fork of [this repository](https://github.
 Every Phase must include a diagram documenting your ecosystem - what components you are using, what scripts and routines are involved, etc.  [draw.io](https://www.draw.io) is a solid, free diagram tool that integrates well with Google Drive.  You can start start with [this draw.io template](https://drive.google.com/file/d/1v3l9bKkw5MWRXFgzkYfLiFeNpNao7WN6/view?usp=sharing).
 
 Individual deliverables for each phase are listed below.
+
 
 #### Phase 1: Pipeline
 
@@ -246,12 +251,13 @@ Individual deliverables for each phase are listed below.
 
 ### Background
 
-This exercise was developed for the [CS 562: Big Data Algorithms](https://crab.rutgers.edu/~shende/cs562/index.html) course at Rutgers University Camden in the Fall 2018 term.  It was born out of conversations between me (Geoff) and Dr. [Sunil Shende](https://shende.camden.rutgers.edu/), the Graduate Program Director for the Rutgers [MS program in Scientific Computing](https://cs.camden.rutgers.edu/graduate/scientific-computing/).  Dr. Shende's MS program aims to prepare students for industry careers in engineering and data science, and I was asked if I could create a project that mirrored a real life problem.  To that end, this exercise is intended to be a challenging but straightforward project graduates could encounter upon entering the workforce.  One that asks a lot of them on many fronts - from pull requests to html to provisioning AWS services - in addition to the "real work" of data science algorithms.
+This exercise was developed for the [CS 562: Big Data Algorithms](https://crab.rutgers.edu/~shende/cs562/index.html) course at Rutgers University Camden in the Fall 2018 term.  It was born out of conversations between me (Geoff) and [Dr. Sunil Shende](https://shende.camden.rutgers.edu/), the Graduate Program Director for the Rutgers [MS program in Scientific Computing](https://cs.camden.rutgers.edu/graduate/scientific-computing/).  Dr. Shende's MS program aims to prepare students for industry careers in engineering and data science, and I was asked if I could create a project that mirrored a real life problem.  To that end, this exercise is intended to be a challenging but straightforward project graduates could encounter upon entering the workforce.  One that asks a lot of them on many fronts - from pull requests to html to provisioning AWS services - in addition to the "real work" of data science algorithms.
 
 Many thanks to Dr. Shende for the opportunity to work with him and his class.  Hopefully, everyone has fun with the experiment.
 
 
 ### Resources
+
 
 #### Data
 
@@ -262,9 +268,11 @@ Initial data sets can be found in the [`data/`](data/) directory in this repo.
 
 plus whatever other data sources you can dream up.
 
+
 #### Code Examples
 
 Some code examples to get you started can be found in the [`code/`](code/) directory in this repo.
+
 
 #### Links
 
