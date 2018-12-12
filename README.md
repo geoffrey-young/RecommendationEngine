@@ -107,19 +107,21 @@ A simple way to use Lambda to read from parquet is to use [AWS Athena](https://a
 
 ![](img/phase2a.png)
 
-Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.  There is [a Lambda function](code/load_dynamodb_from_athena.py) in the [code directory](code/) that can get you started moving data from parquet to DynamoDB via Athena.
+Assuming you created a Glue crawler for your parquet results the data should be immediately visible via Athena, making the task relatively straightforward.  There is [a Lambda function](code/load_dynamodb_from_athena.py) in the [`code` directory](code/) that can get you started moving data from parquet to DynamoDB via Athena.
 
 For the second part, a full tutorial on building a serverless web application can be found [here](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/).  For the display step, you will have an architecture like this:
 
 ![](img/phase2b.png)
 
-You don't need to worry about user authentication, so feel free to skip that part in the tutorial.  There is [a Lambda function](code/get_event_from_dynamodb.py) in the [code directory](code/) that can serve as a starting point for your API Gateway backend.
+You don't need to worry about user authentication, so feel free to skip that part in the tutorial.  There is [a Lambda function](code/get_event_from_dynamodb.py) in the [`code` directory](code/) that can serve as a starting point for your API Gateway backend.
 
 The display doesn't need to be anything fancy - remember, this is a PoC and you only have text to work with, so a simple, structure result page is fine.
 
 ![](img/mapitout.png)
 
 Keep in mind that this page will also be used to display your recommendations in Phase 4.
+
+There is a simple web application in the [`webapp` directory](code/webapp/) that can serve as a starting point.
 
 
 #### Phase 3: Enrichment
