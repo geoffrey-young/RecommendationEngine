@@ -16,8 +16,8 @@ angular.module('recEngineApp', [])
 
   var base = host + endpoint;
 
-     console.error('location ', $location);
-  var eventId = $location.search()['id'];
+  // a simple (if unattractive) way to grab an event id from /index.html?id=XXXXXXX
+  var eventId = ($location.absUrl().split('='))[1];
 
   recommendations = [];
   engine.recommendations = [];
