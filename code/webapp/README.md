@@ -26,7 +26,7 @@ in this directory and you should be able to visit [`http://localhost:8000/`](htt
 
 ### Assumptions
 
-As it stands, the code in [`recengine.js`](recengine.js) will query an AWS API Gateway endpoint looking for a single event.  If you set up your API Gateway to call [the example Lambda function](../code/get_event_from_dynamodb.py) it should work reasonably well.
+As it stands, the code in [`recengine.js`](recengine.js) will query an AWS API Gateway endpoint looking for a single event.  If you set up your API Gateway to call [the example Lambda function](/code/get_event_from_dynamodb.py) it should work reasonably well.
 
 [`recengine.js`](recengine.js) assumes that in each returned `event` object there is a `recommendation` attribute containing a list of event ids.  You will likely want to modify this behavior to suit your needs.
 
